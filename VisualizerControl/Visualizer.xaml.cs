@@ -60,6 +60,10 @@ namespace VisualizerControl
             {
                 AddParticle(pair.Item1, pair.Item2);
             }
+            foreach (var tuple in initialTransformation)
+            {
+                TransformParticle(tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
+            }
 
             ShowVisual = true;
         }
@@ -92,13 +96,6 @@ namespace VisualizerControl
             base.OnRenderSizeChanged(sizeInfo);
             //if (Display != null)
                 //Display.ScaleDisplay((int)sizeInfo.NewSize.Width, (int)sizeInfo.NewSize.Height);
-        }
-
-        public string BackgroundFile
-        {
-            set
-            {
-                          }
         }
 
         public class TempGetRidOfThis
@@ -140,6 +137,20 @@ namespace VisualizerControl
         public void MoveParticle(int index, Vector3D newPosition)
         {
             Display.MoveObject(index, newPosition);
+        }
+
+        List<Tuple<int, Vector3D, Vector3D, Matrix3D>> initialTransformation = new List<Tuple<int, Vector3D, Vector3D, Matrix3D>>();
+        public void TransformParticle(int index, Vector3D newPosition,
+            Vector3D newScale, Matrix3D newRotation)
+        {
+            if (Display == null)
+            {
+                initialTransformation.Add(new Tuple<int, Vector3D, Vector3D, Matrix3D>(index, newPosition, newScale, newRotation));
+            }
+            else
+            {
+                Display.TransformObject(index, newScale, newRotation, newPosition);
+            }
         }
 
         /// <summary>

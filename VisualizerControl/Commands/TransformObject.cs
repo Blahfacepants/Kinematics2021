@@ -42,11 +42,7 @@ namespace VisualizerControl.Commands
 
         public override void Do(Visualizer viz)
         {
-            throw new NotImplementedException();
-            //var obj = viz.RetrieveObject(objectIndex);
-            //obj.Position = position;
-            //obj.Scale = scale;
-            //obj.SetRotation(rotation);
+            viz.TransformParticle(objectIndex, position, scale, rotation);
         }
 
         protected override void WriteContent(BinaryWriter bw)

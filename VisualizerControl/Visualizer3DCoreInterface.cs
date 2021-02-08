@@ -38,8 +38,6 @@ namespace VisualizerControl
 
         protected override HandleRef BuildWindowCore(HandleRef hwndParent)
         {
-
-
             HwndListBox = IntPtr.Zero;
             hwndHost = IntPtr.Zero;
 
@@ -97,7 +95,6 @@ namespace VisualizerControl
             {
                 AddShape(shape);
                 // So each shape is added only once
-                shapeCodes.Add(shape.ShapeName, shapeCodes.Count);
             }
 
             var material = obj.MaterialPrototype as BasicMaterial;
@@ -109,12 +106,13 @@ namespace VisualizerControl
             if (!materialCodes.ContainsKey(material.Color))
             {
                 AddMaterial(material);
-                materialCodes.Add(material.Color, materialCodes.Count);
             }
 
             float[] position = ConvertVector(obj.Position);
             float[] scale = ConvertVector(obj.Scale);
-            int internalIndex = AddObjectX(position, scale, shape.ShapeName, material.Color.ToString());
+            float[] rotation = ConvertMatrix(obj.Rotation.Value);
+            int internalIndex = AddObjectX(scale, rotation, position,
+                shapeCodes[shape.ShapeName], materialCodes[material.Color]);
             externalIndexToInternalIndex.Add(externalIndex, internalIndex);
         }
 
@@ -127,6 +125,29 @@ namespace VisualizerControl
             return response;
         }
 
+        private float[] ConvertMatrix(Matrix3D mat)
+        {
+            float[] response = new float[16];
+
+            response[0] = (float)mat.M11;
+            response[1] = (float)mat.M21;
+            response[2] = (float)mat.M31;
+            response[3] = (float)mat.OffsetX;
+            response[4] = (float)mat.M12;
+            response[5] = (float)mat.M22;
+            response[6] = (float)mat.M32;
+            response[7] = (float)mat.OffsetY;
+            response[8] = (float)mat.M13;
+            response[9] = (float)mat.M23;
+            response[10] = (float)mat.M33;
+            response[11] = (float)mat.OffsetZ;
+            response[12] = (float)mat.M14;
+            response[13] = (float)mat.M24;
+            response[14] = (float)mat.M34;
+            response[15] = (float)mat.M44;
+            return response;
+        }
+
         private void AddMaterial(BasicMaterial material)
         {
             var color = material.Color;
@@ -134,7 +155,8 @@ namespace VisualizerControl
             float r = (float)color.R / 255;
             float g = (float)color.G / 255;
             float b = (float)color.B / 255;
-            AddMaterialX(name, r, g, b, 0.05f, 0.3f);
+            materialCodes.Add(material.Color, materialCodes.Count);
+            AddMaterialX(materialCodes[material.Color], name, r, g, b, 0.05f, 0.3f);
         }
 
         private void AddShape(Shapes.Shape3D shape)
@@ -166,7 +188,8 @@ namespace VisualizerControl
                 triangles[i] = (UInt32)(mesh.TriangleIndices[i]);
             }
 
-            AddShapeX(shape.ShapeName, nVertices, vertices, normals, nTriangleIndices,
+            shapeCodes.Add(shape.ShapeName, shapeCodes.Count);
+            AddShapeX(shapeCodes[shape.ShapeName], nVertices, vertices, normals, nTriangleIndices,
                 triangles);
         }
 
@@ -174,6 +197,16 @@ namespace VisualizerControl
         {
             int internalIndex = externalIndexToInternalIndex[externalIndex];
             MoveObjectX(internalIndex, ConvertVector(newPosition));
+        }
+
+        internal void TransformObject(int externalIndex, Vector3D newScale,
+            Matrix3D newRotation, Vector3D newPosition)
+        {
+            int internalIndex = externalIndexToInternalIndex[externalIndex];
+            float[] position = ConvertVector(newPosition);
+            float[] scale = ConvertVector(newScale);
+            float[] rotation = ConvertMatrix(newRotation);
+            TransformObjectX(internalIndex, scale, rotation, position);
         }
 
         private const string dllName = @"..\..\..\..\VisualizerControl\Visualizer3DCore.dll";
@@ -189,20 +222,23 @@ namespace VisualizerControl
         internal static extern void SetupDirectX();
 
         [DllImport(dllName, EntryPoint = "AddShape", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void AddShapeX(string name, int nVertices, float[] vertices,
+        private static extern void AddShapeX(int index, int nVertices, float[] vertices,
         float[] normals, int nTriangleIndices, UInt32[] triangles);
 
         [DllImport(dllName, EntryPoint = "AddMaterial", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void AddMaterialX(string name, float colorR, float colorG,
-            float colorB, float fresnel, float roughness);
+        private static extern void AddMaterialX(int index, string name, float colorR, 
+            float colorG, float colorB, float fresnel, float roughness);
 
         [DllImport(dllName, EntryPoint = "AddObject", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int AddObjectX(float[] position, float[] scale,
-            string shape, string material);
+        private static extern int AddObjectX(float[] scale, float[] rotation, 
+            float[] position, int shape, int material);
 
         [DllImport(dllName, EntryPoint = "MoveObject", CallingConvention = CallingConvention.Cdecl)]
         private static extern int MoveObjectX(int index, float[] newPosition);
 
+        [DllImport(dllName, EntryPoint = "TransformObject", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int TransformObjectX(int index, float[] scale,
+            float[] rotation, float[] position);
 
         [DllImport("user32.dll", EntryPoint = "CreateWindowEx", CharSet = CharSet.Unicode)]
         private static extern IntPtr CreateWindowEx(int dwExStyle,
