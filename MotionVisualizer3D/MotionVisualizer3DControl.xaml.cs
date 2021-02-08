@@ -14,14 +14,6 @@ namespace MotionVisualizer3D
     /// </summary>
     public partial class MotionVisualizer3DControl : MotionVisualizerBase<Visualizer, VisualizerCommand>
     {
-        public string BackgroundFile
-        {
-            set
-            {
-                Visualizer.BackgroundFile = value;
-            }
-        }
-
         public MotionVisualizer3DControl(IVisualization engine) :
             base(engine, new Visualizer())
         {
