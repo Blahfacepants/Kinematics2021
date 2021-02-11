@@ -135,6 +135,8 @@ namespace MotionVisualizer
 
         virtual public bool SlowDraw { get; set; } = false;
 
+        virtual public bool FastDraw { get; set; } = false;
+
         /// <summary>
         /// Updates visualization
         /// </summary>
@@ -156,13 +158,16 @@ namespace MotionVisualizer
                 // Update graphs
                 Graphs.Update(turn.Data);
 
-                //Check if delay is needed
-                var timeDiff = DisplayTime - timer.Elapsed.TotalSeconds * TimeScale;
-                if (timeDiff > 0)
+                if (!FastDraw)
                 {
-                    // This delays it so the clocks will line up
-                    int delay = (int)(timeDiff * 1000);
-                    await Task.Delay(delay); // Convert to milliseconds
+                    //Check if delay is needed
+                    var timeDiff = DisplayTime / TimeScale - timer.Elapsed.TotalSeconds;
+                    if (timeDiff > 0)
+                    {
+                        // This delays it so the clocks will line up
+                        int delay = (int)(timeDiff * 1000); // Convert to milliseconds
+                        await Task.Delay(delay); 
+                    }
                 }
 
                 double timeSinceLastDraw = timer.Elapsed.TotalSeconds - timeOfLastDraw;

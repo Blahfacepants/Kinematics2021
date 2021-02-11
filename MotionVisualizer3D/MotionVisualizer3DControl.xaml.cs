@@ -83,6 +83,7 @@ namespace MotionVisualizer3D
             {
                 timeScale = value;
                 TimeScaleSlider.Text = timeScale.ToString();
+                TimeScale = value;
             }
         }
 
