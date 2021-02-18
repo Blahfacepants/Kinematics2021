@@ -104,7 +104,7 @@ namespace MotionVisualizer3D
         /// </summary>
         public bool Display { get; set; } = true;
 
-
+        
         private void Start_Button_Click(object sender, RoutedEventArgs e)
         {
             if (IsRunning)

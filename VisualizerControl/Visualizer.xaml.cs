@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,29 +44,35 @@ namespace VisualizerControl
 
         private Timer timer = new Timer(33);
 
+        private bool UIinitialized = false;
+
         private void OnUIReady(object sender, EventArgs e)
         {
             //var initial = TheArena.Initialization();
-
-            app = Application.Current;
-            myWindow = app.MainWindow;
-            //myWindow.SizeToContent = SizeToContent.WidthAndHeight;
-            Display = new Visualizer3DCoreInterface(Visualizer3DCoreInterfaceHolder.ActualWidth,
-                Visualizer3DCoreInterfaceHolder.ActualHeight);
-            Visualizer3DCoreInterfaceHolder.Child = Display;
-            hwndListBox = Display.HwndListBox;
-
-            // Add the particles that couldn't be added until initialization was done
-            foreach (var pair in initialParticles)
+            if (!UIinitialized)
             {
-                AddParticle(pair.Item1, pair.Item2);
-            }
-            foreach (var tuple in initialTransformation)
-            {
-                TransformParticle(tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
-            }
 
-            ShowVisual = true;
+                app = Application.Current;
+                myWindow = app.MainWindow;
+                //myWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                Display = new Visualizer3DCoreInterface(Visualizer3DCoreInterfaceHolder.ActualWidth,
+                    Visualizer3DCoreInterfaceHolder.ActualHeight);
+                Visualizer3DCoreInterfaceHolder.Child = Display;
+                hwndListBox = Display.HwndListBox;
+
+                // Add the particles that couldn't be added until initialization was done
+                foreach (var pair in initialParticles)
+                {
+                    AddParticle(pair.Item1, pair.Item2);
+                }
+                foreach (var tuple in initialTransformation)
+                {
+                    TransformParticle(tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
+                }
+
+                ShowVisual = true;
+                UIinitialized = true;
+            }
         }
 
         private void WhenLoaded(object sender, RoutedEventArgs e)
@@ -73,7 +80,8 @@ namespace VisualizerControl
             var window = Window.GetWindow(this);
             if (!initialized)
             {
-                Visualizer3DCoreInterface.SetupDirectX();
+                // Call it as a task, or else everything hangs here
+                Task.Run(() => Visualizer3DCoreInterface.SetupDirectX());
                 initialized = true;
             }
             InvalidateVisual();

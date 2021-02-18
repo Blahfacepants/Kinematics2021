@@ -2,6 +2,7 @@
 using GraphData;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
@@ -119,7 +120,12 @@ namespace MotionVisualizer
                 if (turnBuffer.Count > MaxBufferSize)
                 {
                     while (turnBuffer.Count > SizeToResume)
-                    { }
+                    {
+                        // This will break out if things are paused
+                        // Otherwise it runs forever
+                        if (!IsRunning)
+                            return;
+                    }
                 }
                 // Send to the buffer
                 turnBuffer.Post(package);
