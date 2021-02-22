@@ -6,7 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DongUtility\DongUtility.csproj" />
+    <ProjectReference Include="..\Geometry\Geometry.csproj" />
   </ItemGroup>
 
 </Project>

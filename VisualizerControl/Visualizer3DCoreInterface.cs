@@ -84,7 +84,7 @@ namespace VisualizerControl
         }
 
         private Dictionary<string, int> shapeCodes = new Dictionary<string, int>();
-        private Dictionary<Color, int> materialCodes = new Dictionary<Color, int>();
+        private Dictionary<BasicMaterial, int> materialCodes = new Dictionary<BasicMaterial, int>();
         private Dictionary<int, int> externalIndexToInternalIndex = new Dictionary<int, int>();
 
         internal void AddObject(Object3D obj, int externalIndex)
@@ -97,13 +97,9 @@ namespace VisualizerControl
                 // So each shape is added only once
             }
 
-            var material = obj.MaterialPrototype as BasicMaterial;
-            if (material == null)
-            {
-                throw new NotImplementedException("Haven't gotten to non-basic materials yet");
-            }
+            var material = obj.Material;
 
-            if (!materialCodes.ContainsKey(material.Color))
+            if (!materialCodes.ContainsKey(material))
             {
                 AddMaterial(material);
             }
@@ -112,7 +108,7 @@ namespace VisualizerControl
             float[] scale = ConvertVector(obj.Scale);
             float[] rotation = ConvertMatrix(obj.Rotation.Value);
             int internalIndex = AddObjectX(scale, rotation, position,
-                shapeCodes[shape.ShapeName], materialCodes[material.Color]);
+                shapeCodes[shape.ShapeName], materialCodes[material]);
             externalIndexToInternalIndex.Add(externalIndex, internalIndex);
         }
 
@@ -155,8 +151,8 @@ namespace VisualizerControl
             float r = (float)color.R / 255;
             float g = (float)color.G / 255;
             float b = (float)color.B / 255;
-            materialCodes.Add(material.Color, materialCodes.Count);
-            AddMaterialX(materialCodes[material.Color], name, r, g, b, 0.05f, 0.3f);
+            materialCodes.Add(material, materialCodes.Count);
+            AddMaterialX(materialCodes[material], name, r, g, b, (float)material.Fresnel, (float)material.Roughness);
         }
 
         private void AddShape(Shapes.Shape3D shape)

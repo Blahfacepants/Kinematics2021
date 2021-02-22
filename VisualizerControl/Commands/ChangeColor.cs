@@ -9,9 +9,11 @@ namespace VisualizerControl.Commands
 {
     public class ChangeColor : ChangeMaterial
     {
-        public ChangeColor(int index, Color color, bool isSpecular = false) :
-            base(index, new BasicMaterial(color, isSpecular))
+        public ChangeColor(int index, Color color) :
+            base(index, new BasicMaterial(color, 0,0 ))
         {
+            // Fix the constructor above
+            throw new NotImplementedException();
         }
     }
 }

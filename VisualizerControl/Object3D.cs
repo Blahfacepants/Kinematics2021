@@ -16,44 +16,31 @@ namespace VisualizerControl
     public class Object3D
     {
         public Shape3D Shape { get; }
-        public MaterialPrototype MaterialPrototype { get; }
-
-        /// <summary>
-        /// The geometry of the object
-        /// </summary>
-        public GeometryModel3D GeoModel { get; private set; }
+        public BasicMaterial Material { get; }
 
         private TranslateTransform3D translation = new TranslateTransform3D();
         private ScaleTransform3D scale = new ScaleTransform3D();
         private Transform3D rotation = Transform3D.Identity;
-        //private AxisAngleRotation3D thetaRotation = new AxisAngleRotation3D();
-        //private AxisAngleRotation3D phiRotation = new AxisAngleRotation3D(new Vector3D(0, 0, 1), 0);
 
         /// <param name="shape">The shape (geometry) of the object</param>
         /// <param name="material">The material of the object</param>
-        public Object3D(Shape3D shape, Material material)
+        public Object3D(Shape3D shape, BasicMaterial material)
         {
             this.Shape = shape;
+            Material = material;
 
             // Create transformation
             var transGroup = new Transform3DGroup();
             transGroup.Children.Add(scale);
             transGroup.Children.Add(rotation);
             transGroup.Children.Add(translation);
-
-            // Create geometry model
-            GeoModel = new GeometryModel3D(shape.Mesh, material)
-            {
-                Transform = transGroup
-            };
-
         }
 
         /// <summary>
         /// Copy constructor
         /// </summary>
         public Object3D(Object3D other) :
-            this(other.Shape, other.GeoModel.Material)
+            this(other.Shape, other.Material)
         {
             Position = other.Position;
             Scale = other.Scale;
@@ -61,12 +48,12 @@ namespace VisualizerControl
         }
 
         public Object3D(ObjectPrototype proto) :
-            this(proto.Shape, proto.MaterialPrototype.Material)
+            this(proto.Shape, proto.Material)
         {
             Position = proto.Position;
             Scale = proto.Scale;
             rotation = new MatrixTransform3D(proto.Rotation);
-            MaterialPrototype = proto.MaterialPrototype;
+            Material = proto.Material;
         }
 
         /// <summary>

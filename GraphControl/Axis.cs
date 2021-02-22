@@ -22,16 +22,16 @@ namespace GraphControl
         public string Title { get; set; }
 
         private readonly LineGeometry line = new LineGeometry();
-        private Geometry geoAxis;
-        private Geometry scientificNotation;
+        private System.Windows.Media.Geometry geoAxis;
+        private System.Windows.Media.Geometry scientificNotation;
         private GeometryGroup group;
 
         private readonly bool bottom;
 
         private readonly DrawingGroup axisLabels = new DrawingGroup();
-        private readonly Dictionary<double, Geometry> labelDict = new Dictionary<double, Geometry>();
+        private readonly Dictionary<double, System.Windows.Media.Geometry> labelDict = new Dictionary<double, System.Windows.Media.Geometry>();
 
-        private Geometry MakeText(string text, Point position, int fontSize = 10)
+        private System.Windows.Media.Geometry MakeText(string text, Point position, int fontSize = 10)
         {
             FormattedText thisText = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight,
                 new Typeface("Arial"), fontSize, Brushes.Black, 1)
@@ -145,7 +145,7 @@ namespace GraphControl
                 finalTransform = trans;
             }
 
-            Geometry newGeom;
+            System.Windows.Media.Geometry newGeom;
             if (labelDict.ContainsKey(value))
             {
                 newGeom = labelDict[value];

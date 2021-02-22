@@ -56,15 +56,15 @@ namespace GraphControl
                         FlowDirection.LeftToRight, new Typeface("Arial"), 10, myBrush, 1);
                     // 1 is pixels per dip, which seems not to matter
                     double boxSize = thisText.Height;
-                    Geometry geo = new RectangleGeometry(new Rect(0, currentY, boxSize, boxSize));
+                    var geo = new RectangleGeometry(new Rect(0, currentY, boxSize, boxSize));
                     drawing.Children.Add(new GeometryDrawing(myBrush, null, geo));
-                    Geometry textGeo = thisText.BuildGeometry(new Point(1.5 * boxSize, currentY));
+                    var textGeo = thisText.BuildGeometry(new Point(1.5 * boxSize, currentY));
                     drawing.Children.Add(new GeometryDrawing(myBrush, null, textGeo));
                     currentY += boxSize;
                 }
 
                 //Rectangle border around legend
-                Geometry legendRect = new RectangleGeometry(new Rect(-.05 * drawing.Bounds.Width, -.05 * drawing.Bounds.Height, drawing.Bounds.Width * 1.1, drawing.Bounds.Height * 1.1));
+                var legendRect = new RectangleGeometry(new Rect(-.05 * drawing.Bounds.Width, -.05 * drawing.Bounds.Height, drawing.Bounds.Width * 1.1, drawing.Bounds.Height * 1.1));
                 drawing.Children.Insert(0, new GeometryDrawing(Brushes.White, new Pen(Brushes.Black, 1), legendRect));
             }
           

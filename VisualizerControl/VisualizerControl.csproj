@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DongUtility\DongUtility.csproj" />
+    <ProjectReference Include="..\Geometry\Geometry.csproj" />
     <ProjectReference Include="..\VisualizerBaseClasses\VisualizerBaseClasses.csproj" />
     <ProjectReference Include="..\WPFUtility\WPFUtility.csproj" />
   </ItemGroup>

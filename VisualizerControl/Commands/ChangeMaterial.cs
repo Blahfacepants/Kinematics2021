@@ -10,9 +10,9 @@ namespace VisualizerControl.Commands
     public class ChangeMaterial : VisualizerCommand
     {
         private readonly int index;
-        private readonly MaterialPrototype material;
+        private readonly BasicMaterial material;
 
-        public ChangeMaterial(int index, MaterialPrototype materialPrototype)
+        public ChangeMaterial(int index, BasicMaterial materialPrototype)
         {
             this.index = index;
             material = materialPrototype;
@@ -26,13 +26,13 @@ namespace VisualizerControl.Commands
 
         protected override void WriteContent(BinaryWriter bw)
         {
-            material.WriteToFile(bw);
+            material.WriteContent(bw);
             bw.Write(index);
         }
 
         internal ChangeMaterial(BinaryReader br)
         {
-            material = MaterialPrototype.ReadFromFile(br);
+            material = new BasicMaterial(br);
             index = br.ReadInt32();
         }
     }

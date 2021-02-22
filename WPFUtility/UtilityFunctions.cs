@@ -1,11 +1,14 @@
 using DongUtility;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using Color = System.Windows.Media.Color;
 
 namespace WPFUtility
 {
@@ -44,17 +47,28 @@ namespace WPFUtility
             return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
-        static public System.Windows.Media.Media3D.Vector3D ConvertVector(DongUtility.Vector vec)
+        static public Vector3D ConvertVector(DongUtility.Vector vec)
         {
-            return new System.Windows.Media.Media3D.Vector3D(vec.X, vec.Y, vec.Z);
+            return new Vector3D(vec.X, vec.Y, vec.Z);
         }
 
-        static public RenderTargetBitmap MakeScreenshot(int width, int height, Visual visual)
+        static public BitmapSource MakeScreenshot(int width, int height, Visual visual)
         {
-            var (dpiX, dpiY) = GetDPI();
-            RenderTargetBitmap bitmap = new RenderTargetBitmap(width, height, dpiX, dpiY, PixelFormats.Pbgra32);
-            bitmap.Render(visual);
-            return bitmap;
+            var upperLeft = visual.PointToScreen(new System.Windows.Point(0, 0));
+            double screenLeft = upperLeft.X;
+            double screenTop = upperLeft.Y;
+            double screenWidth = width;
+            double screenHeight = height;
+
+            using (Bitmap bmp = new Bitmap((int)screenWidth,
+                (int)screenHeight))
+            {
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.CopyFromScreen((int)screenLeft, (int)screenTop, 0, 0, bmp.Size);
+                }
+                return Imaging.CreateBitmapSourceFromHBitmap(bmp.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            }
         }
 
         static public void SaveScreenshot(int width, int height, Visual visual)
@@ -97,6 +111,11 @@ namespace WPFUtility
             return new Vector3D(point.X, point.Y, point.Z);
         }
 
+        static public Vector3D ConvertToVector3D(Geometry.Geometry3D.Point point)
+        {
+            return new Vector3D(point.X, point.Y, point.Z);
+        }
+
         static public Vector3D Midpoint(Vector3D one, Vector3D two)
         {
             return (one + two) / 2;
@@ -119,7 +138,7 @@ namespace WPFUtility
 
         static public Color InvertColor(Color color)
         {
-            return Color.FromArgb(color.A, (byte)(Constants.MaxByte - color.R), 
+            return Color.FromArgb(color.A, (byte)(Constants.MaxByte - color.R),
                 (byte)(Constants.MaxByte - color.G), (byte)(Constants.MaxByte - color.B));
         }
     }

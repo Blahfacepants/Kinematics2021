@@ -36,7 +36,7 @@ namespace GraphControl
         public double Thickness { get; set; } = 3;
 
         /// <summary>
-        /// Create an Objcet Timeline for creating and updating a graph.
+        /// Create an Object Timeline for creating and updating a graph.
         /// </summary>
         /// <param name="name">Name of the graph</param>
         /// <param name="valx">Function for X (delegate).</param>

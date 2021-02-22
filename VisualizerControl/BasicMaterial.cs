@@ -6,64 +6,31 @@ using WPFUtility;
 
 namespace VisualizerControl
 {
-    public class BasicMaterial : MaterialPrototype
+    public class BasicMaterial
     {
         public Color Color { get; }
-        private readonly bool specular;
+        public double Fresnel { get; }
+        public double Roughness { get; }
 
-        public BasicMaterial(Color color, bool specular = false)
+        public BasicMaterial(Color color, double fresnel, double roughness)
         {
-            this.Color = color;
-            this.specular = specular;
+            Color = color;
+            Fresnel = fresnel;
+            Roughness = roughness;
         }
 
-        private const double specularCoefficient = 1;
-        static private Dictionary<Color, Brush> brushes = new Dictionary<Color, Brush>();
-        static private Dictionary<Color, DiffuseMaterial> diffMaterials = new Dictionary<Color, DiffuseMaterial>();
-        static private Dictionary<Color, SpecularMaterial> specMaterials = new Dictionary<Color, SpecularMaterial>();
-
-        /// <summary>
-        /// Creates a new material if one does not exist, or otherwise returns it from a dictionary
-        /// </summary>
-        public override Material Material
+        public BasicMaterial(BinaryReader br)
         {
-            get
-            {
-                if (!brushes.ContainsKey(Color))
-                {
-                    var newBrush = new SolidColorBrush(Color);
-                    newBrush.Freeze();
-                    brushes[Color] = newBrush;
-                }
-                var brush = brushes[Color];
-
-                if (specular)
-                {
-                    if (!specMaterials.ContainsKey(Color))
-                    {
-                        var newMaterial = new SpecularMaterial(brush, specularCoefficient);
-                        newMaterial.Freeze();
-                        specMaterials[Color] = newMaterial;
-                    }
-                    return specMaterials[Color];
-                }
-                else
-                {
-                    if (!diffMaterials.ContainsKey(Color))
-                    {
-                        var newMaterial = new DiffuseMaterial(brush);
-                        newMaterial.Freeze();
-                        diffMaterials[Color] = newMaterial;
-                    }
-                    return diffMaterials[Color];
-                }
-            }
+            Color = br.ReadColor();
+            Fresnel = br.ReadDouble();
+            Roughness = br.ReadDouble();
         }
 
-        protected override void WriteContent(BinaryWriter bw)
+        public void WriteContent(BinaryWriter bw)
         {
             bw.Write(Color);
-            bw.Write(specular);
+            bw.Write(Fresnel);
+            bw.Write(Roughness);
         }
     }
 }
