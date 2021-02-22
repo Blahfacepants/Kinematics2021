@@ -78,7 +78,7 @@ namespace Visualizer.Kinematics
             foreach (var projectile in projectiles)
             {
                 // Start it off in the right place
-                var obj = new ObjectPrototype(projectile.Shape, new BasicMaterial(projectile.Color),
+                var obj = new ObjectPrototype(projectile.Shape, new BasicMaterial(projectile.Color, .05, .3),
                     projectile.Position, new Vector3D(projectile.Size, projectile.Size, projectile.Size));
 
                 set.AddCommand(new AddObject(obj, counter));
@@ -92,7 +92,7 @@ namespace Visualizer.Kinematics
                 // Update them first so they are in the right position
                 connector.Value.Update();
                 var obj = new ObjectPrototype(new VisualizerControl.Shapes.CaplessCylinder3D(), 
-                    new BasicMaterial(connector.Value.Color));
+                    new BasicMaterial(connector.Value.Color, .05, .3));
                 set.AddCommand(new AddObject(obj, connector.Key));
                 set.AddCommand(connector.Value.GetTransformCommand(connector.Key));
             }
