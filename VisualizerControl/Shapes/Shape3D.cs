@@ -47,9 +47,14 @@ namespace VisualizerControl.Shapes
         {
             bw.Write(ShapeName);
             bw.Write(freezeMesh);
+            if (!namesUsedInWriting.ContainsKey(bw))
+            {
+                namesUsedInWriting.Add(bw, new HashSet<string>());
+            }
+
             if (!namesUsedInWriting[bw].Contains(ShapeName))
             {
-                bw.Write(meshes[ShapeName]);
+                bw.Write(Mesh);
                 namesUsedInWriting[bw].Add(ShapeName);
             }
         }
@@ -61,6 +66,11 @@ namespace VisualizerControl.Shapes
         {
             string name = br.ReadString();
             bool freeze = br.ReadBoolean();
+
+            if (!namesUsedInReading.ContainsKey(br))
+            {
+                namesUsedInReading.Add(br, new HashSet<string>());
+            }
 
             if (!namesUsedInReading[br].Contains(name))
             {

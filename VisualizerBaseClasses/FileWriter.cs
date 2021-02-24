@@ -19,7 +19,7 @@ namespace VisualizerBaseClasses
         private TEngine engine;
         public GraphDataManager Manager { get; } = new GraphDataManager();
 
-        public void Run(string filename, double timeStep, double messageEvery = double.MaxValue)
+        public void Run(string filename, double timeStep, double maxTime = double.MaxValue, double messageEvery = double.MaxValue)
         {
             using var bw = new BinaryWriter(File.OpenWrite(filename));
 
@@ -28,7 +28,7 @@ namespace VisualizerBaseClasses
             Manager.WriteGraphHeader(bw);
 
             double nextMessageTime = messageEvery;
-            while (engine.Continue)
+            while (engine.Continue && engine.Time < maxTime)
             {
                 if (engine.Time > nextMessageTime)
                 {

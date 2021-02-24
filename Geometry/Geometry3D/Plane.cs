@@ -7,13 +7,14 @@ namespace Geometry.Geometry3D
 {
     public class Plane
     {
-        // Implemented internally as coeffs.X * x + coeffs.Y * y + coeffs.Z * z + 1 = 0
-        private Vector coeffs;
+        // Implemented internally as coeffs.X * x + coeffs.Y * y + coeffs.Z * z + d = 0
+        private readonly Vector coeffs;
+        private readonly double constant;
 
         public Plane(Point point, Vector normal)
         {
-            double denominator = -Vector.Dot(normal, point.PositionVector());
-            coeffs = normal / denominator;
+            coeffs = normal;
+            constant = -Vector.Dot(normal, point.PositionVector());
         }
 
         public Plane(Point p1, Point p2, Point p3) :
@@ -57,13 +58,13 @@ namespace Geometry.Geometry3D
             return new Geometry2D.Point(rotatedPoint.X, rotatedPoint.Y);
         }
 
-        Geometry2D.Line TransformTo2D(Line line)
+        public Geometry2D.Line TransformTo2D(Line line)
         {
             var ray = TransformTo2D(line.UnderlyingRay);
             return ray.UnderlyingLine;
         }
 
-        Geometry2D.Ray TransformTo2D(Ray ray)
+        public Geometry2D.Ray TransformTo2D(Ray ray)
         {
             var point1 = TransformTo2D(ray.EndPoint);
             var point2inSpace = ray.EndPoint.PositionVector()
@@ -73,7 +74,7 @@ namespace Geometry.Geometry3D
             return new Geometry2D.Ray(point1, point2 - point1);
         }
 
-        Geometry2D.LineSegment TransformTo2D(LineSegment segment)
+        public Geometry2D.LineSegment TransformTo2D(LineSegment segment)
         {
             var point1 = TransformTo2D(segment.Point1);
             var point2 = TransformTo2D(segment.Point2);
@@ -83,7 +84,7 @@ namespace Geometry.Geometry3D
 
         public bool IsInPlane(Point point)
         {
-            return coeffs.X * point.X + coeffs.Y * point.Y + coeffs.Z * point.Z == -1;
+            return Vector.Dot(coeffs, point.PositionVector()) + constant == 0;
         }
 
         /// <summary>
@@ -119,57 +120,60 @@ namespace Geometry.Geometry3D
 
         public Point Intersection(Line line)
         {
-            var dir = line.UnderlyingRay.Direction;
-            var point = line.UnderlyingRay.EndPoint;
-            // First the special case of ux = 0
-            if (dir.X == 0)
-            {
-                if (dir.Y == 0)
-                {
-                    // -a * x0 – b * y0 – 1
-                    double numeratorx0y0 = -coeffs.X * point.X
-                        - coeffs.Y * point.Y - 1;
-                    // c
-                    double denominatorx0y0 = coeffs.Z;
-                    TestIntersection(numeratorx0y0, denominatorx0y0);
-                    double zx0y0 = numeratorx0y0 / denominatorx0y0;
-                    return new Point(point.X, point.Y, zx0y0);
-                }
-                else
-                {
-                    // c * (uz * y0 – uy * z0) – uy * (a * x0 – 1)
-                    double numeratorx0 = coeffs.Z * (dir.Z * point.Y - dir.Y * point.Z)
-                        - dir.Y * (coeffs.X * point.X - 1);
-                    //  b * uy + c * uz
-                    double denominatorx0 = coeffs.Y * dir.Y + coeffs.Z * dir.Z;
-                    TestIntersection(numeratorx0, denominatorx0);
-                    double yx0 = numeratorx0 / denominatorx0;
-                    // z = uz / uy * (y – y0) + z0
-                    double zx0 = dir.Z / dir.Y * (yx0 - point.Y) + point.Z;
-                    return new Point(point.X, yx0, zx0);
-                }
-            }
+            // This needs to be redone with the new equation
+            throw new NotImplementedException();
 
-            //b * (uy * x0 – ux * y0) + c * (uz * x0 – ux * z0) – ux
-            double numerator =
-                coeffs.Y * (dir.Y * point.X - dir.X * point.Y)
-                + coeffs.Z * (dir.Z * point.X - dir.X * point.Z)
-                - dir.X;
+            //var dir = line.UnderlyingRay.Direction;
+            //var point = line.UnderlyingRay.EndPoint;
+            //// First the special case of ux = 0
+            //if (dir.X == 0)
+            //{
+            //    if (dir.Y == 0)
+            //    {
+            //        // -a * x0 – b * y0 – 1
+            //        double numeratorx0y0 = -coeffs.X * point.X
+            //            - coeffs.Y * point.Y - 1;
+            //        // c
+            //        double denominatorx0y0 = coeffs.Z;
+            //        TestIntersection(numeratorx0y0, denominatorx0y0);
+            //        double zx0y0 = numeratorx0y0 / denominatorx0y0;
+            //        return new Point(point.X, point.Y, zx0y0);
+            //    }
+            //    else
+            //    {
+            //        // c * (uz * y0 – uy * z0) – uy * (a * x0 – 1)
+            //        double numeratorx0 = coeffs.Z * (dir.Z * point.Y - dir.Y * point.Z)
+            //            - dir.Y * (coeffs.X * point.X - 1);
+            //        //  b * uy + c * uz
+            //        double denominatorx0 = coeffs.Y * dir.Y + coeffs.Z * dir.Z;
+            //        TestIntersection(numeratorx0, denominatorx0);
+            //        double yx0 = numeratorx0 / denominatorx0;
+            //        // z = uz / uy * (y – y0) + z0
+            //        double zx0 = dir.Z / dir.Y * (yx0 - point.Y) + point.Z;
+            //        return new Point(point.X, yx0, zx0);
+            //    }
+            //}
 
-            // a * ux + b * uy + c * uz
-            double denominator = coeffs.X * dir.X
-                + coeffs.Y * dir.Y
-                + coeffs.Z * dir.Z;
+            ////b * (uy * x0 – ux * y0) + c * (uz * x0 – ux * z0) – ux
+            //double numerator =
+            //    coeffs.Y * (dir.Y * point.X - dir.X * point.Y)
+            //    + coeffs.Z * (dir.Z * point.X - dir.X * point.Z)
+            //    - dir.X;
 
-            TestIntersection(numerator, denominator);
+            //// a * ux + b * uy + c * uz
+            //double denominator = coeffs.X * dir.X
+            //    + coeffs.Y * dir.Y
+            //    + coeffs.Z * dir.Z;
 
-            double x = numerator / denominator;
-            // y = uy / ux * (x – x0) + y0
-            double y = dir.Y / dir.X * (x - point.X) + point.Y;
-            // z = uz / ux * (x – x0) + z0
-            double z = dir.Z / dir.X * (x - point.X) + point.Z;
+            //TestIntersection(numerator, denominator);
 
-            return new Point(x, y, z);            
+            //double x = numerator / denominator;
+            //// y = uy / ux * (x – x0) + y0
+            //double y = dir.Y / dir.X * (x - point.X) + point.Y;
+            //// z = uz / ux * (x – x0) + z0
+            //double z = dir.Z / dir.X * (x - point.X) + point.Z;
+
+            //return new Point(x, y, z);            
         }
 
         public double Distance2 (Point point)
@@ -265,8 +269,8 @@ namespace Geometry.Geometry3D
 
         public bool SameHalfSpace(Point p1, Point p2)
         {
-            double score1 = Vector.Dot(coeffs, p1.PositionVector()) + 1;
-            double score2 = Vector.Dot(coeffs, p2.PositionVector()) + 1;
+            double score1 = Vector.Dot(coeffs, p1.PositionVector()) + constant;
+            double score2 = Vector.Dot(coeffs, p2.PositionVector()) + constant;
 
             if (score1 == 0 || score2 == 0)
                 return false;

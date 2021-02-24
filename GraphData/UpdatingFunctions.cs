@@ -18,6 +18,11 @@ namespace GraphData
             functions.Add(function);
         }
 
+        public void AddFunctions(UpdatingFunctions other)
+        {
+            functions.AddRange(other.functions);
+        }
+
         public GraphDataPacket GetData()
         {
             var data = new GraphDataPacket();

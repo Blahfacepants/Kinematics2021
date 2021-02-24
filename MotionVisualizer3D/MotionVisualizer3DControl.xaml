@@ -38,6 +38,8 @@
             <CheckBox Name="SlowDrawCheck" VerticalAlignment="Center" Margin="5 10 20 10" Checked="SlowDrawCheck_Checked"/>
             <Button Click="Save_Button_Click" Padding="5">Save</Button>
             <Button Click="Screenshot_Button_Click" Padding="5">Screenshot</Button>
+
+            <Button Click="RecordButtonClicked" Padding="5">Record</Button>
         </StackPanel>
         <ContentControl Name="VisualizerSpot" Grid.Row="1"/>
     

@@ -205,6 +205,11 @@ namespace VisualizerControl
             TransformObjectX(internalIndex, scale, rotation, position);
         }
 
+        public void SetAutoCamera(bool value)
+        {
+            SetAutoCameraX(value);
+        }
+
         private const string dllName = @"..\..\..\..\VisualizerControl\Visualizer3DCore.dll";
         //private const string dllName = @"C:\Users\pdong\Documents\Visual Studio Repositories\Computational Science Spring 2021\VisualizerControl\Visualizer3DCore.dll";
 
@@ -235,6 +240,9 @@ namespace VisualizerControl
         [DllImport(dllName, EntryPoint = "TransformObject", CallingConvention = CallingConvention.Cdecl)]
         private static extern int TransformObjectX(int index, float[] scale,
             float[] rotation, float[] position);
+
+        [DllImport(dllName, EntryPoint = "SetAutoCamera", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int SetAutoCameraX(bool value);
 
         [DllImport("user32.dll", EntryPoint = "CreateWindowEx", CharSet = CharSet.Unicode)]
         private static extern IntPtr CreateWindowEx(int dwExStyle,

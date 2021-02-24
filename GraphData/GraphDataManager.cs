@@ -27,6 +27,12 @@ namespace GraphData
             }
         }
 
+        public void CopyGraphsFrom(GraphDataManager other)
+        {
+            graphs.AddRange(other.graphs);
+            updatingFunctions.AddFunctions(other.updatingFunctions);
+        }
+
         public delegate double BasicFunction();
         public delegate List<double> ListFunction();
         public delegate Vector VectorFunc();

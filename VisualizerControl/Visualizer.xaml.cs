@@ -169,13 +169,12 @@ namespace VisualizerControl
 
         }
 
-        /// <summary>
-        /// Performs an automatic camera adjustment to keep all particles in the field of view and centered
-        /// </summary>
-        public void AdjustCamera()
+        public bool AutoCamera
         {
-
+            set
+            {
+                Display.SetAutoCamera(value);
+            }
         }
-
     }
 }

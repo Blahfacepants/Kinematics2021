@@ -14,9 +14,13 @@ namespace MotionVisualizer3D
     /// </summary>
     public partial class MotionVisualizer3DControl : MotionVisualizerBase<Visualizer, VisualizerCommand>
     {
+        // Just for recording use; no one else needs this
+        private readonly IVisualization engine;
+
         public MotionVisualizer3DControl(IVisualization engine) :
             base(engine, new Visualizer())
         {
+            this.engine = engine;
             FinishInitialization();
         }
 
@@ -104,7 +108,6 @@ namespace MotionVisualizer3D
         /// </summary>
         public bool Display { get; set; } = true;
 
-        
         private void Start_Button_Click(object sender, RoutedEventArgs e)
         {
             if (IsRunning)
@@ -137,8 +140,7 @@ namespace MotionVisualizer3D
             if (AutoCameraCheck.IsChecked != null)
             {
                 autoCamera = (bool)AutoCameraCheck.IsChecked;
-                if (!IsRunning && autoCamera)
-                    Visualizer.AdjustCamera();
+                Visualizer.AutoCamera = autoCamera;
             }
         }
 
@@ -170,6 +172,38 @@ namespace MotionVisualizer3D
             if (SlowDrawCheck.IsChecked != null)
             {
                 SlowDraw = (bool)SlowDrawCheck.IsChecked;
+            }
+        }
+
+        private void RecordButtonClicked(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = "Trajectory",
+                DefaultExt = ".dat"
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                string filename = dlg.FileName;
+
+                var howLongBox = new HowLongQuery();
+
+                howLongBox.Owner = this;
+                if (howLongBox.ShowDialog() == true)
+                {
+                    if (double.TryParse(howLongBox.StopTimeText.Text, out double time))
+                    {
+                        var fileWriter = new FileWriter<Visualizer, VisualizerCommand, IVisualization>(engine);
+                        fileWriter.Manager.CopyGraphsFrom(Manager);
+
+                        fileWriter.Run(filename, TimeIncrement, time);
+
+                        MessageBox.Show("Recording complete!");
+                    }
+
+
+                }
             }
         }
     }
