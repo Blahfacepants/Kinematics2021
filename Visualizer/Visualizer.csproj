@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Projectile\Projectile.csproj" />
     <ProjectReference Include="..\GraphControl\GraphControl.csproj" />
     <ProjectReference Include="..\GraphData\GraphData.csproj" />
     <ProjectReference Include="..\MotionVisualizer3D\MotionVisualizer3D.csproj" />

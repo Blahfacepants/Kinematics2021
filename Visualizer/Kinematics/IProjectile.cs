@@ -17,6 +17,8 @@ namespace Visualizer.Kinematics
         /// The current position of the particle, as a Vector3D.
         /// </summary>
         Vector3D Position { get; }
+        Vector3D Velocity { get; }
+        Vector3D Accleration { get; }
         
         /// <summary>
         /// The output color of the projectile on the screen.  Your choice of color!

@@ -12,12 +12,12 @@ namespace Visualizer.PlanetaryPool
     /// This is the only file you should turn in
     /// Please make sure to replace "YOURNAME" with your actual name, in both the file name and the class name
     /// </summary>
-    public class GravitationalStructureYOURNAME : GravitationalStructure
+    public class GravitationalStructureArchanDas : GravitationalStructure
     {
         /// <summary>
         /// The constructor cannot take any arguments.  Please hard-code any parameters you wish to add.
         /// </summary>
-        public GravitationalStructureYOURNAME()
+        public GravitationalStructureArchanDas()
         {
             // Put your code here to create tetrahedra
 
