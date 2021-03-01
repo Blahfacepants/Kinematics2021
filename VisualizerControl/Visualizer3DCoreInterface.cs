@@ -151,8 +151,9 @@ namespace VisualizerControl
             float r = (float)color.R / 255;
             float g = (float)color.G / 255;
             float b = (float)color.B / 255;
+            float a = (float)color.A / 255;
             materialCodes.Add(material, materialCodes.Count);
-            AddMaterialX(materialCodes[material], name, r, g, b, (float)material.Fresnel, (float)material.Roughness);
+            AddMaterialX(materialCodes[material], name, r, g, b, a, (float)material.Fresnel, (float)material.Roughness);
         }
 
         private void AddShape(Shapes.Shape3D shape)
@@ -228,7 +229,7 @@ namespace VisualizerControl
 
         [DllImport(dllName, EntryPoint = "AddMaterial", CallingConvention = CallingConvention.Cdecl)]
         private static extern void AddMaterialX(int index, string name, float colorR, 
-            float colorG, float colorB, float fresnel, float roughness);
+            float colorG, float colorB, float alpha, float fresnel, float roughness);
 
         [DllImport(dllName, EntryPoint = "AddObject", CallingConvention = CallingConvention.Cdecl)]
         private static extern int AddObjectX(float[] scale, float[] rotation, 

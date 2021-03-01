@@ -142,5 +142,10 @@ namespace DongUtility
             }
             return returnVal;
         }
+
+        public static bool IsValid(double number)
+        {
+            return !(double.IsNaN(number) || double.IsInfinity(number));
+        }
     }
 }

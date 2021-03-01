@@ -22,6 +22,9 @@ namespace VisualizerControl.Commands
 
         public MoveObject(int index, Vector3D newPosition)
         {
+            if (!newPosition.IsValid())
+                throw new ArgumentException("Infinity or not-a-number passed into MoveObject!");
+
             this.newPosition = newPosition;
             this.index = index;
         }

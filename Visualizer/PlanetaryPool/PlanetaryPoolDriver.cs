@@ -69,6 +69,17 @@ namespace Visualizer.PlanetaryPool
         {
             return new UtilityLibraries.Vector(vector.X, vector.Y, vector.Z);
         }
+
+        /// <summary>
+        /// Runs a trajectory file already created (as a test)
+        /// To use this, modify Driver.cs to point to this function instead of RunPlanetaryPool()
+        /// And, of course, change the filename
+        /// </summary>
+        static internal void TestTrajectoryFile()
+        {
+            var fullViz = new MotionVisualizer3DControl(@"C:\Users\pdong\Desktop\Trajectory.dat", new VisualizerControl.VisualizerCommandFileReader());
+            fullViz.Show();
+        }
     }
 
 
