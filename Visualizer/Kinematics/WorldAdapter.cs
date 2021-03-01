@@ -32,7 +32,7 @@ namespace Visualizer.Kinematics
             get
             {
                 List<IProjectile> output = new List<IProjectile>();
-                foreach (Projectile p in world.projectiles)
+                foreach (ProjectileParent p in world.projectiles)
                 {
                     output.Add(new ProjectileAdapter(p));
                 }

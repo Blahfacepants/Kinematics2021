@@ -18,7 +18,7 @@ namespace Visualizer.Kinematics
         /// </summary>
         Vector3D Position { get; }
         Vector3D Velocity { get; }
-        Vector3D Accleration { get; }
+        Vector3D Acceleration { get; }
         
         /// <summary>
         /// The output color of the projectile on the screen.  Your choice of color!

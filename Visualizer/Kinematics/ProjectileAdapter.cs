@@ -10,10 +10,10 @@ namespace Visualizer.Kinematics
 {
     class ProjectileAdapter : IProjectile
     {
-        Projectile projectile;
+        ProjectileParent projectile;
 
         //Passes the projectile object by reference (I hope)
-        public ProjectileAdapter(Projectile projectile)
+        public ProjectileAdapter(ProjectileParent projectile)
         {
             this.projectile = projectile;
         }
@@ -62,7 +62,7 @@ namespace Visualizer.Kinematics
             }
         }
 
-        public Vector3D Accleration
+        public Vector3D Acceleration
         {
             get
             {
