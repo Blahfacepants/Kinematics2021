@@ -25,6 +25,11 @@ namespace DongUtility
         /// <param name="z"></param>
         public Vector(double x, double y, double z)
         {
+            if (!UtilityFunctions.IsValid(x) || !UtilityFunctions.IsValid(y) || !UtilityFunctions.IsValid(z))
+            {
+                throw new ArgumentException("Attempted to pass infinity or not-a-number to Vector class!");
+            }
+
             this.X = x;
             this.Y = y;
             this.Z = z;
@@ -34,11 +39,9 @@ namespace DongUtility
         /// Copy constructor
         /// </summary>
         /// <param name="rhs">The vector to copy from</param>
-        public Vector(Vector rhs)
+        public Vector(Vector rhs) :
+            this(rhs.X, rhs.Y, rhs.Z)
         {
-            X = rhs.X;
-            Y = rhs.Y;
-            Z = rhs.Z;
         }
 
         public override bool Equals(object obj)

@@ -2,10 +2,11 @@
 {
     class Driver
     {
+
         static internal void Run()
         {
-            Kinematics.KinematicsDriver.RunKinematics();
             PlanetaryPool.PlanetaryPoolDriver.RunPlanetaryPool();
+            //PlanetaryPool.PlanetaryPoolDriver.TestTrajectoryFile();
         }
 
     }

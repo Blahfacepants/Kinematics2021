@@ -17,7 +17,7 @@ namespace MotionVisualizer3D
         // Just for recording use; no one else needs this
         private readonly IVisualization engine;
 
-        public MotionVisualizer3DControl(IVisualization engine) : 
+        public MotionVisualizer3DControl(IVisualization engine) :
             base(engine, new Visualizer())
         {
             this.engine = engine;
@@ -25,7 +25,7 @@ namespace MotionVisualizer3D
         }
 
         public MotionVisualizer3DControl(string filename, VisualizerCommandFileReader reader) :
-            base(filename, reader)
+            base(filename, reader, new Visualizer())
         {
             FinishInitialization();
         }

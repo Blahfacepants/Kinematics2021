@@ -82,6 +82,10 @@ namespace VisualizerControl
             {
                 // Call it as a task, or else everything hangs here
                 Task.Run(() => Visualizer3DCoreInterface.SetupDirectX());
+
+                // Just for debugging
+                //Visualizer3DCoreInterface.SetupDirectX();
+
                 initialized = true;
             }
             InvalidateVisual();

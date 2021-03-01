@@ -34,10 +34,10 @@ namespace MotionVisualizer
             FinishInitialization();
         }
 
-        public MotionVisualizerBase(string filename, ICommandFileReader<TVisualizer> factory)
+        public MotionVisualizerBase(string filename, ICommandFileReader<TVisualizer> factory, TVisualizer visualizer)
         {
             core = new FromFileEngineCore<TVisualizer, TCommand>(filename, factory);
-
+            Visualizer = visualizer;
             FinishInitialization();
         }
 

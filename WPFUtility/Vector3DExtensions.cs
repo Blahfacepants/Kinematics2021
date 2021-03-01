@@ -36,5 +36,12 @@ namespace WPFUtility
         {
             return (one + two) / 2;
         }
+
+        static public bool IsValid(this Vector3D vector)
+        {
+            return DongUtility.UtilityFunctions.IsValid(vector.X)
+                && DongUtility.UtilityFunctions.IsValid(vector.Y)
+                && DongUtility.UtilityFunctions.IsValid(vector.Z);
+        }
     }
 }

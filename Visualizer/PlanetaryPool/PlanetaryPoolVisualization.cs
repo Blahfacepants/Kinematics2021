@@ -16,7 +16,6 @@ namespace Visualizer.PlanetaryPool
         private GravitationalStructure gravStruct;
         private IEngine engine;
         private List<IProjectile> projectiles;
-        private int counter = 0;
 
         public PlanetaryPoolVisualization(GravitationalStructure structure, IEngine engine)
         {
@@ -25,20 +24,23 @@ namespace Visualizer.PlanetaryPool
             projectiles = engine.Projectiles;
         }
 
-        public bool Continue { get; private set; }
+        public bool Continue { get; private set; } = true;
 
         public double Time => engine.Time;
 
         public CommandSet<VisualizerControl.Visualizer> Initialization()
         {
+            int counter = 0;
             var set = new VisualizerCommandSet();
 
-            var projectile = projectiles[0];
-            // Start it off in the right place
-            var obj = new ObjectPrototype(projectile.Shape, new BasicMaterial(projectile.Color, .05, .3),
-                projectile.Position, new Vector3D(projectile.Size, projectile.Size, projectile.Size));
+            foreach (var projectile in projectiles)
+            {
+                // Start it off in the right place
+                var obj = new ObjectPrototype(projectile.Shape, new BasicMaterial(projectile.Color, .05, .3),
+                    projectile.Position, new Vector3D(projectile.Size, projectile.Size, projectile.Size));
 
-            set.AddCommand(new AddObject(obj, counter++));
+                set.AddCommand(new AddObject(obj, counter++));
+            }
 
             foreach (var tetrahedron in gravStruct.GetTetrahedra())
             {
@@ -60,7 +62,11 @@ namespace Visualizer.PlanetaryPool
 
             var set = new VisualizerCommandSet();
 
-            set.AddCommand(new MoveObject(0, projectiles[0].Position));
+            int counter = 0;
+            foreach (var projectile in projectiles)
+            {
+                set.AddCommand(new MoveObject(counter++, projectile.Position));
+            }
 
             return set;
         }

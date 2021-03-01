@@ -57,6 +57,9 @@ namespace VisualizerControl
         public ObjectPrototype(Shape3D shape, BasicMaterial material, Vector3D position, Vector3D scale,
             Matrix3D rotation)
         {
+            if (!position.IsValid() || !scale.IsValid())
+                throw new ArgumentException("Infinity or not-a-number passed into ObjectPrototype!");
+
             Shape = shape;
             Material = material;
             Position = position;

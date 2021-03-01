@@ -19,6 +19,10 @@ namespace DongUtility
         /// </summary>
         public Vector2D(double x, double y)
         {
+            if (!UtilityFunctions.IsValid(x) || !UtilityFunctions.IsValid(y))
+            {
+                throw new ArgumentException("Attempted to pass infinity or not-a-number to Vector2D class!");
+            }
             X = x;
             Y = y;
         }
@@ -27,10 +31,9 @@ namespace DongUtility
         /// Copy constructor
         /// </summary>
         /// <param name="rhs">The vector to copy from</param>
-        public Vector2D(Vector2D rhs)
+        public Vector2D(Vector2D rhs) :
+            this(rhs.X, rhs.Y)
         {
-            X = rhs.X;
-            Y = rhs.Y;
         }
 
         public override bool Equals(object obj)
