@@ -77,7 +77,7 @@ namespace Visualizer.PlanetaryPool
         /// </summary>
         static internal void TestTrajectoryFile()
         {
-            var fullViz = new MotionVisualizer3DControl(@"C:\Users\pdong\Desktop\Trajectory.dat", new VisualizerControl.VisualizerCommandFileReader());
+            var fullViz = new MotionVisualizer3DControl(@"C:\Users\creek\Documents\Trajectory.dat", new VisualizerControl.VisualizerCommandFileReader());
             fullViz.Show();
         }
     }

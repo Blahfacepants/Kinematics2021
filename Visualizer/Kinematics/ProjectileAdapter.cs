@@ -58,7 +58,7 @@ namespace Visualizer.Kinematics
         {
             get
             {
-                return 1;
+                return 10;
             }
         }
 

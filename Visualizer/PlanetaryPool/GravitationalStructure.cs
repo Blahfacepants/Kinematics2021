@@ -21,10 +21,10 @@ namespace Visualizer.PlanetaryPool
         {
             foreach (var tet in tetrahedrons)
             {
-                if (tet.Overlap(tetrahedron))
-                {
-                    throw new ArgumentException("Tetrahedra are not allowed to overlap!");
-                }
+                //if (tet.Overlap(tetrahedron))
+                //{
+                //    throw new ArgumentException("Tetrahedra are not allowed to overlap!");
+                //}
             }
 
             tetrahedrons.Add(tetrahedron);

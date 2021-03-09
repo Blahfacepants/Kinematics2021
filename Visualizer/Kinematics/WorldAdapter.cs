@@ -34,7 +34,10 @@ namespace Visualizer.Kinematics
                 List<IProjectile> output = new List<IProjectile>();
                 foreach (ProjectileParent p in world.projectiles)
                 {
-                    output.Add(new ProjectileAdapter(p));
+                    if (!(p is Tetrahedron))
+                    {
+                        output.Add(new ProjectileAdapter(p));
+                    }
                 }
                 return output;
             }
